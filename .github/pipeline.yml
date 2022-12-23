@@ -16,10 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Deploy to server
-      uses: appleboy/ftp-deploy-action@master
+      uses: peaceiris/actions-ftp-deploy@v1.1.1
       with:
         host: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local_dir: .output
         remote_dir: /public_html/nuxt
+
