@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install vinyl-ftp
-      run: npm install vinyl-ftp # Install the VINYL-FTP extension
+        run: npm install vinyl-ftp # Install the VINYL-FTP extension
       - name: Deploy to server
         # Set environment variables for the FTP host, username, and password
         env:
