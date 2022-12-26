@@ -1,21 +1,32 @@
+# This is a workflow to deploy a Nuxt.js application to a DirectAdmin or cPanel server
+# using the FTP-KR extension and GitHub Actions.
+
 name: Deploy to server
 
+# The workflow will run on push events and pull request events
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: npm ci
-    - name: Build application
-      run: npm run build
   deploy:
-    needs: build
+    # The job will run on an Ubuntu machine
     runs-on: ubuntu-latest
     steps:
-    - name: Install FTP-KR
-      run: npm install ftp-kr
-    - name: Deploy to server
-      run: node -e "require('ftp-kr').deploy({ host: '${{ secrets.FTP_HOST }}', user: '${{ secrets.FTP_USERNAME }}', password: '${{ secrets.FTP_PASSWORD }}', localPath: '.output', remotePath: '/public_html/nuxt' })"
+      - name: Install FTP-KR
+        run: npm install ftp-kr # Install the FTP-KR extension
+      - name: Deploy to server
+        # Set environment variables for the FTP host, username, and password
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        # Run the FTP-KR script to deploy the code to the server
+        run: |
+          node -e "
+            require('ftp-kr').deploy({
+              host: '$FTP_HOST',
+              user: '$FTP_USERNAME',
+              password: '$FTP_PASSWORD',
+              localPath: '.output',
+              remotePath: '/public_html/nuxt'
+            });
+          "
