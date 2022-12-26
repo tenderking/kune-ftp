@@ -21,14 +21,14 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         # Run the FTP-KR script to deploy the code to the server
         run: |
-          const VinylFtp = require('vinyl-ftp');
-          const ftp = new VinylFtp({
+          var VinylFtp = require('vinyl-ftp');
+          var ftp = new VinylFtp({
             host: process.env.FTP_HOST,
             user: process.env.FTP_USERNAME,
             password: process.env.FTP_PASSWORD,
             parallel: 10,
             log: console.log
           });
-          const globs = ['.output/**/*'];
+          var globs = ['.output/**/*'];
           return ftp.src(globs, { base: '.output', buffer: false })
             .pipe(ftp.dest('/public_html/nuxt'));
