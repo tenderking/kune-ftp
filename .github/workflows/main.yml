@@ -1,6 +1,6 @@
 name: Deploy to server
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -15,12 +15,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: Install FTP-KR
+      run: npm install ftp-kr
     - name: Deploy to server
-      uses: peaceiris/actions-ftp-deploy@v1.1.1
-      with:
-        host: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local_dir: .output
-        remote_dir: /public_html/nuxt
-
+      run: node -e "require('ftp-kr').deploy({ host: '${{ secrets.FTP_HOST }}', user: '${{ secrets.FTP_USERNAME }}', password: '${{ secrets.FTP_PASSWORD }}', localPath: '.output', remotePath: '/public_html/nuxt' })"
