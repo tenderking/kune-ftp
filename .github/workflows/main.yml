@@ -11,8 +11,8 @@ jobs:
     # The job will run on an Ubuntu machine
     runs-on: ubuntu-latest
     steps:
-      - name: Install FTP-KR
-        run: npm install ftp-kr # Install the FTP-KR extension
+      - name: Install vinyl-ftp
+      run: npm install vinyl-ftp # Install the VINYL-FTP extension
       - name: Deploy to server
         # Set environment variables for the FTP host, username, and password
         env:
@@ -21,12 +21,14 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         # Run the FTP-KR script to deploy the code to the server
         run: |
-          node -e "
-            require('ftp-kr').deploy({
-              host: '$FTP_HOST',
-              user: '$FTP_USERNAME',
-              password: '$FTP_PASSWORD',
-              localPath: '.output',
-              remotePath: '/public_html/nuxt'
-            });
-          "
+        const VinylFtp = require('vinyl-ftp');
+        const ftp = new VinylFtp({
+          host: process.env.FTP_HOST,
+          user: process.env.FTP_USERNAME,
+          password: process.env.FTP_PASSWORD,
+          parallel: 10,
+          log: console.log
+        });
+        const globs = ['.output/**/*'];
+        return ftp.src(globs, { base: '.output', buffer: false })
+          .pipe(ftp.dest('/public_html/nuxt'));
