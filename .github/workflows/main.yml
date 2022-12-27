@@ -21,5 +21,3 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         # Run the VINYL-FTP script to deploy the code to the server
         run: npx vinyl-ftp -h ${{ secrets.FTP_HOST }} -u ${{ secrets.FTP_USERNAME }} -p ${{ secrets.FTP_PASSWORD }} put -L .output /public_html/nuxt
-
-
