@@ -1,11 +1,18 @@
 module.exports = function(grunt) {
   grunt.initConfig({
-    // Define your tasks and configurations here
+    ftp_deploy: {
+      build: {
+        auth: {
+          host: '${{ secrets.FTP_HOST }}',
+          port: 21,
+          authKey: '${{ secrets.FTP_AUTH_KEY }}'
+        },
+        src: 'dist',
+        dest: '/public_html/nuxt'
+      }
+    }
   });
 
-  // Load the grunt-ftp-deploy plugin
   grunt.loadNpmTasks('grunt-ftp-deploy');
-
-  // Register the ftp-deploy task
   grunt.registerTask('ftp-deploy', ['ftp-deploy']);
 };
