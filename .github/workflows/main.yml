@@ -6,16 +6,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Install dependencies
       run: npm ci
+    - name: Install grunt
+      run: npm install grunt --save-dev
     - name: Build application
       run: npm run build
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Install grunt and grunt-ftp-deploy
-      run: npm install -g grunt grunt-ftp-deploy
+    - name: Install grunt-ftp-deploy
+      run: npm install grunt-ftp-deploy --save-dev
     - name: Deploy to server
-      run: grunt ftp-deploy --auth.host='${{ secrets.FTP_HOST }}' --auth.port=21 --auth.authKey='${{ secrets.FTP_AUTH_KEY }}' --src='dist' --dest='/public_html/nuxt'
+      run: grunt ftp-deploy
