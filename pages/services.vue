@@ -19,7 +19,7 @@
 
     <main class="container">
       <template v-if="services">
-        <ServicesGrid :services="services" />
+        <ServicesGrid />
       </template>
       <h2 v-else>No services</h2>
 
